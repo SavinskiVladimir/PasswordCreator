@@ -18,12 +18,12 @@ class PasswordFormer
 {
     ifstream Fin;
     ofstream Fout;
-    string neccesarry_sumbols = "^:'_@!*%$#=+-";
-    string letters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    const string neccesarry_symbols = "^:'_@!*%$#=+-";
+    const string letters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789";
     bool isNew(string pass)
     {
         Fin.open("used.txt");
-        if (Fin.tellg() == 0) return true;
+        if (Fin.tellg() == -1) return true;
         int sum = 0;
         int score= 0;
         int count = 0;
@@ -44,12 +44,13 @@ class PasswordFormer
         if ((double)sum / (double)count >= 7.0) return false;
         return true;
     }
-    string encrypt(string result)
+    string encrypt(string& result)
     {
+        string encoded = "";
         char code = rand() % 265;
-        for (int i = 0; i < result.size(); i++) result[i] = result[i] ^ code;
-        result = code + result;
-        return result;
+        for (int i = 0; i < result.size(); i++) encoded += result[i] ^ code;
+        encoded = code + encoded;
+        return encoded;
     }
     string decrypt(string result)
     {
@@ -77,7 +78,7 @@ class PasswordFormer
                 int temp = rand() % len;
                 if (result[temp] == '\0')
                 {
-                    result[temp] = neccesarry_sumbols[rand() % neccesarry_sumbols.size()];
+                    result[temp] = neccesarry_symbols[rand() % neccesarry_symbols.size()];
                     flag = false;
                 }
             }
